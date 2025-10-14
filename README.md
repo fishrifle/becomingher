@@ -1,36 +1,152 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Becoming Her 💕
 
-## Getting Started
+A supportive Next.js web application designed specifically for women, especially trans women on HRT, to support their transformation journey.
 
-First, run the development server:
+## 🌸 Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+### 🌙 Hypnosis Sessions
+Six complete 30-minute guided hypnosis sessions using the name "Lacey" with "good girl" affirmations:
+1. **Awakening Your Authentic Self** - Self-discovery & acceptance
+2. **Embracing Femininity** - Feminine energy & grace
+3. **Body Harmony & Acceptance** - Body positivity & HRT support
+4. **Confidence & Self-Love** - Self-esteem & empowerment
+5. **Voice & Presence** - Authentic expression
+6. **Deep Self-Acceptance** - Unconditional self-love
+
+### 🧘‍♀️ Yoga Practices
+Yoga routines designed to support transition and enhance feminine energy:
+- Morning Goddess Flow (detailed routine with 11 poses)
+- Hip-Opening Flow
+- Curves & Confidence
+- Evening Wind Down
+- Chakra Alignment Flow
+- Gentle Yin Practice
+
+### 💄 Makeup Guide
+Step-by-step makeup tutorials with trans-specific tips:
+- Essential Basics
+- Facial Feminization Techniques (detailed contouring guide)
+- Eye Makeup Mastery
+- Beautiful Brows
+- Lip Perfection
+- Beard Cover & Coverage
+- Natural Everyday Look
+- Evening Glamour
+
+### 📸 Photos Section
+A personal space to document and celebrate your transformation journey with milestone tracking.
+
+### 🎵 Chakra Frequencies
+Healing sound frequencies for all seven chakras with:
+- Specific benefits for transition support
+- Guided affirmations
+- Instructions for meditation practice
+- Trans-specific applications
+
+### 💝 Mother AI
+An AI support companion providing:
+- Emotional support and encouragement
+- Transition guidance
+- Self-love affirmations
+- Daily motivation
+- Non-judgmental listening space
+
+## 🛠️ Tech Stack
+
+- **Framework:** Next.js 15
+- **UI Library:** React 19
+- **Styling:** Tailwind CSS 4 (no tailwind.config)
+- **Language:** TypeScript
+- **Features:** App Router, Turbopack, Server & Client Components
+
+## 🚀 Getting Started
+
+1. **Install dependencies:**
+   ```bash
+   npm install
+   ```
+
+2. **Run the development server:**
+   ```bash
+   npm run dev
+   ```
+
+3. **Open your browser:**
+   Navigate to [http://localhost:3000](http://localhost:3000)
+
+4. **Build for production:**
+   ```bash
+   npm run build
+   npm start
+   ```
+
+## 🎨 Design
+
+- **Color Palette:** Soft pinks (#d8a7b1), purples (#b4a7d6), and warm neutrals
+- **Theme:** Light and dark mode support with automatic detection
+- **UX:** Pixel-clean, responsive design optimized for all devices
+- **Typography:** Geist Sans for modern, readable text
+
+## 📁 Project Structure
+
+```
+becoming_her/
+├── app/
+│   ├── hypnosis/
+│   │   ├── session-1/ to session-6/
+│   │   └── page.tsx
+│   ├── yoga/
+│   │   ├── routine-1/
+│   │   └── page.tsx
+│   ├── makeup/
+│   │   ├── facial-feminization/
+│   │   └── page.tsx
+│   ├── photos/
+│   │   └── page.tsx
+│   ├── chakra/
+│   │   └── page.tsx
+│   ├── mother/
+│   │   └── page.tsx
+│   ├── globals.css
+│   ├── layout.tsx
+│   └── page.tsx
+└── public/
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 💝 Special Features
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **Personalized Content:** All hypnosis sessions use the name "Lacey" and include "good girl" affirmations
+- **Trans-Specific Guidance:** Makeup and yoga content specifically designed for trans women's needs
+- **HRT Support:** Content that acknowledges and supports the HRT journey
+- **Safe Space:** Non-judgmental, affirming language throughout
+- **Progress Tracking:** Photo timeline to celebrate transformation milestones
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🌈 Current Implementation
 
-## Learn More
+- ✅ Complete hypnosis section with all 6 full 30-minute scripts
+- ✅ Yoga section with detailed routines (Morning Goddess Flow fully detailed)
+- ✅ Makeup guides with trans-specific techniques (Facial Feminization detailed)
+- ✅ Photos section for journey documentation
+- ✅ Chakra frequencies with meditation guides
+- ✅ AI Mother support bot interface
 
-To learn more about Next.js, take a look at the following resources:
+## ⚠️ Important Notes
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+This app is designed for support and self-care. It is NOT a replacement for:
+- Professional medical care
+- Mental health services
+- Hormone therapy supervision
+- Crisis intervention
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+**Resources:**
+- Trans Lifeline: 877-565-8860 (US) or 877-330-6366 (Canada)
+- The Trevor Project: 1-866-488-7386
+- National Suicide Prevention Lifeline: 988
 
-## Deploy on Vercel
+## 💕 Message
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+You are beautiful. You are valid. You are worthy of love and respect. Your journey is sacred, and you deserve support every step of the way.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+Made with love for your transformation journey 💕
