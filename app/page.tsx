@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useState } from "react";
 
 export default function Home() {
@@ -36,6 +37,13 @@ export default function Home() {
       bgClass: "from-purple-300/30 via-pink-300/30 to-purple-300/30"
     },
     {
+      name: "Journal",
+      href: "/journal",
+      icon: "📝",
+      description: "Track feelings & progress",
+      bgClass: "from-rose-300/30 via-pink-300/30 to-fuchsia-300/30"
+    },
+    {
       name: "Photos",
       href: "/photos",
       icon: "📸",
@@ -67,33 +75,47 @@ export default function Home() {
             <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-pink-400 via-purple-400 to-pink-400 bg-clip-text text-transparent flex items-center gap-2">
               ✨ Becoming Her 💖
             </h1>
-            <button
-              onClick={() => setMenuOpen(!menuOpen)}
-              className="sm:hidden p-2 rounded-lg hover:bg-primary/10 transition-colors"
-            >
-              <svg
-                className="w-6 h-6"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
+            <div className="flex items-center gap-4">
+              <Link
+                href="/pricing"
+                className="hidden sm:block px-4 py-2 rounded-lg bg-gradient-to-r from-pink-500 to-purple-500 text-white font-semibold hover:from-pink-600 hover:to-purple-600 transition-all"
               >
-                {menuOpen ? (
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                ) : (
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M4 6h16M4 12h16M4 18h16"
-                  />
-                )}
-              </svg>
-            </button>
+                ✨ Go Premium
+              </Link>
+              <Link
+                href="/sign-in"
+                className="hidden sm:block px-4 py-2 rounded-lg border-2 border-pink-400 text-pink-500 font-semibold hover:bg-pink-50/10 transition-all"
+              >
+                Sign In
+              </Link>
+              <button
+                onClick={() => setMenuOpen(!menuOpen)}
+                className="sm:hidden p-2 rounded-lg hover:bg-primary/10 transition-colors"
+              >
+                <svg
+                  className="w-6 h-6"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  {menuOpen ? (
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  ) : (
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M4 6h16M4 12h16M4 18h16"
+                    />
+                  )}
+                </svg>
+              </button>
+            </div>
           </div>
         </div>
       </header>
@@ -119,16 +141,30 @@ export default function Home() {
 
       {/* Main content */}
       <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
-        {/* Hero section */}
-        <div className="text-center mb-12 sm:mb-16">
-          <div className="text-6xl mb-6">💕✨🌸</div>
-          <h2 className="text-4xl sm:text-6xl font-bold mb-4 sm:mb-6 bg-gradient-to-r from-pink-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
-            Welcome, Beautiful! 💖
-          </h2>
-          <p className="text-lg sm:text-xl text-foreground/80 max-w-2xl mx-auto">
-            Your gorgeous girly space to blossom, grow, and embrace the amazing woman you are!
-            Made with love especially for trans girls like us on our HRT journey! 🎀✨
-          </p>
+        {/* Hero section with image */}
+        <div className="relative rounded-3xl overflow-hidden mb-12 border-2 border-pink-300/30">
+          <div className="relative h-96">
+            <Image
+              src="https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=1600&q=80"
+              alt="Beautiful woman in feminine clothes"
+              fill
+              className="object-cover"
+              priority
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent"></div>
+          </div>
+          <div className="absolute inset-0 flex items-center justify-center text-center px-4">
+            <div>
+              <div className="text-6xl mb-6">💕✨🌸</div>
+              <h2 className="text-4xl sm:text-6xl font-bold mb-4 sm:mb-6 text-white drop-shadow-2xl">
+                Welcome, Beautiful! 💖
+              </h2>
+              <p className="text-lg sm:text-xl text-white/95 max-w-2xl mx-auto drop-shadow-lg">
+                Your gorgeous girly space to blossom, grow, and embrace the amazing woman you are!
+                Made with love especially for trans girls like us on our HRT journey! 🎀✨
+              </p>
+            </div>
+          </div>
         </div>
 
         {/* Sections grid */}

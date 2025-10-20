@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useState } from "react";
 
 interface GuideSection {
@@ -100,21 +101,34 @@ export default function MakeupPage() {
       </header>
 
       <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
-        {/* Cute Vanity Header */}
-        <div className="text-center mb-12">
-          <div className="text-6xl mb-4">💅✨💄</div>
-          <h2 className="text-4xl sm:text-5xl font-bold mb-4 bg-gradient-to-r from-pink-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
-            Your Girly Makeup Vanity 💖
-          </h2>
-          <p className="text-lg text-foreground/70 max-w-2xl mx-auto mb-6">
-            Welcome to your gorgeous makeup space, beautiful! 🎀 These guides are specially made
-            for trans girls like us, with all the tips and tricks to help you feel absolutely stunning!
-          </p>
-          <div className="inline-block bg-gradient-to-r from-pink-100/20 via-purple-100/20 to-pink-100/20 border-2 border-pink-300/30 rounded-2xl px-8 py-4 shadow-lg">
-            <p className="text-sm text-foreground/90">
-              💕 <strong className="text-pink-400">Remember, gorgeous:</strong> Makeup is pure self-expression and FUN!
-              You're a beautiful girl with or without it! ✨
-            </p>
+        {/* Hero Vanity Image */}
+        <div className="relative rounded-3xl overflow-hidden mb-12 border-2 border-pink-300/30">
+          <div className="relative h-80">
+            <Image
+              src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=1600&q=80"
+              alt="Beautiful makeup vanity with cosmetics"
+              fill
+              className="object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
+          </div>
+          <div className="absolute inset-0 flex items-center justify-center text-center px-4">
+            <div>
+              <div className="text-6xl mb-4">💅✨💄</div>
+              <h2 className="text-4xl sm:text-5xl font-bold mb-4 text-white drop-shadow-2xl">
+                Your Girly Makeup Vanity 💖
+              </h2>
+              <p className="text-lg text-white/95 max-w-2xl mx-auto mb-6 drop-shadow-lg">
+                Welcome to your gorgeous makeup space, beautiful! 🎀 These guides are specially made
+                for trans girls like us, with all the tips and tricks to help you feel absolutely stunning!
+              </p>
+              <div className="inline-block bg-white/20 backdrop-blur-sm border border-white/40 rounded-2xl px-8 py-4">
+                <p className="text-sm text-white/95 drop-shadow">
+                  💕 <strong>Remember, gorgeous:</strong> Makeup is pure self-expression and FUN!
+                  You're a beautiful girl with or without it! ✨
+                </p>
+              </div>
+            </div>
           </div>
         </div>
 

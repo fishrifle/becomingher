@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useState } from "react";
 
 interface YogaRoutine {
@@ -129,36 +130,45 @@ export default function YogaPage() {
 
       {/* Main content */}
       <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
-        {/* Introduction with visual background */}
-        <div className="relative text-center mb-12 overflow-hidden rounded-3xl border-2 border-pink-300/30 p-8 bg-gradient-to-br from-pink-100/20 via-rose-100/20 to-pink-100/20">
-          {/* Decorative circles */}
-          <div className="absolute top-0 right-0 w-64 h-64 bg-pink-300/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
-          <div className="absolute bottom-0 left-0 w-64 h-64 bg-rose-300/20 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2"></div>
-
-          <div className="relative z-10">
-            <div className="text-7xl mb-4">🧘‍♀️✨💕</div>
-            <h2 className="text-4xl sm:text-5xl font-bold mb-4 bg-gradient-to-r from-pink-400 to-rose-400 bg-clip-text text-transparent">
-              Your Girly Yoga Journey
-            </h2>
-            <p className="text-lg text-foreground/80 max-w-2xl mx-auto mb-6">
-              These gorgeous yoga routines are designed especially for trans girls like us!
-              Support your transition, embrace feminine energy, and feel amazing in your body! 💖
-            </p>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-3xl mx-auto">
-              <div className="bg-gradient-to-br from-pink-200/30 to-rose-200/30 border-2 border-pink-300/40 rounded-2xl p-4">
-                <p className="text-sm text-foreground/90 font-semibold">
-                  💪 Body Support: <span className="font-normal">Movements that work with HRT changes</span>
-                </p>
-              </div>
-              <div className="bg-gradient-to-br from-rose-200/30 to-pink-200/30 border-2 border-pink-300/40 rounded-2xl p-4">
-                <p className="text-sm text-foreground/90 font-semibold">
-                  ✨ Energy Work: <span className="font-normal">Activate feminine energy</span>
-                </p>
-              </div>
-              <div className="bg-gradient-to-br from-pink-200/30 to-rose-200/30 border-2 border-pink-300/40 rounded-2xl p-4">
-                <p className="text-sm text-foreground/90 font-semibold">
-                  💝 Self-Love: <span className="font-normal">Body acceptance & compassion</span>
-                </p>
+        {/* Hero Image */}
+        <div className="relative rounded-3xl overflow-hidden mb-12 border-2 border-pink-300/30">
+          <div className="relative h-80">
+            <Image
+              src="https://images.unsplash.com/photo-1588286840104-8957b019727f?w=1600&q=80"
+              alt="Woman doing yoga in beautiful surroundings"
+              fill
+              className="object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
+          </div>
+          <div className="absolute inset-0 flex items-center justify-center text-center px-4">
+            <div>
+              <div className="text-7xl mb-4">🧘‍♀️✨💕</div>
+              <h2 className="text-4xl sm:text-5xl font-bold mb-4 text-white drop-shadow-2xl">
+                Your Girly Yoga Journey
+              </h2>
+              <p className="text-lg text-white/95 max-w-2xl mx-auto mb-6 drop-shadow-lg">
+                These gorgeous yoga routines are designed especially for trans girls like us!
+                Support your transition, embrace feminine energy, and feel amazing in your body! 💖
+              </p>
+              <div className="inline-block bg-white/20 backdrop-blur-sm border border-white/40 rounded-2xl px-8 py-4">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="text-center">
+                    <p className="text-sm text-white/95 font-semibold drop-shadow">
+                      💪 Body Support
+                    </p>
+                  </div>
+                  <div className="text-center">
+                    <p className="text-sm text-white/95 font-semibold drop-shadow">
+                      ✨ Energy Work
+                    </p>
+                  </div>
+                  <div className="text-center">
+                    <p className="text-sm text-white/95 font-semibold drop-shadow">
+                      💝 Self-Love
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

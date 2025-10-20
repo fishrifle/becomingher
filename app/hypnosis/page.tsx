@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useState } from "react";
 
 interface HypnosisSession {
@@ -99,22 +100,35 @@ export default function HypnosisPage() {
 
       {/* Main content */}
       <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
-        {/* Introduction */}
-        <div className="text-center mb-12">
-          <div className="text-5xl mb-4">🌙</div>
-          <h2 className="text-3xl sm:text-4xl font-bold mb-4">
-            Guided Hypnosis for Transformation
-          </h2>
-          <p className="text-lg text-foreground/70 max-w-2xl mx-auto mb-6">
-            These sessions are designed specifically for you, Lacey. Each one
-            is crafted to support your journey of becoming your authentic self.
-            Find a quiet, comfortable space and allow yourself to relax deeply.
-          </p>
-          <div className="inline-block bg-accent/50 border border-primary/30 rounded-lg px-6 py-3">
-            <p className="text-sm text-foreground/80">
-              💡 <strong>Tip:</strong> Use headphones for the best experience.
-              Never listen while driving or operating machinery.
-            </p>
+        {/* Hero Image Introduction */}
+        <div className="relative rounded-3xl overflow-hidden mb-12 border-2 border-purple-300/30">
+          <div className="relative h-72">
+            <Image
+              src="https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=1600&q=80"
+              alt="Peaceful woman meditating"
+              fill
+              className="object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent"></div>
+          </div>
+          <div className="absolute inset-0 flex items-center justify-center text-center px-4">
+            <div>
+              <div className="text-5xl mb-4">🌙✨</div>
+              <h2 className="text-3xl sm:text-4xl font-bold mb-4 text-white drop-shadow-2xl">
+                Guided Hypnosis for Transformation
+              </h2>
+              <p className="text-lg text-white/95 max-w-2xl mx-auto mb-6 drop-shadow-lg">
+                These sessions are designed specifically for you, Lacey. Each one
+                is crafted to support your journey of becoming your authentic self.
+                Find a quiet, comfortable space and allow yourself to relax deeply.
+              </p>
+              <div className="inline-block bg-white/20 backdrop-blur-sm border border-white/40 rounded-lg px-6 py-3">
+                <p className="text-sm text-white/95 drop-shadow">
+                  💡 <strong>Tip:</strong> Use headphones for the best experience.
+                  Never listen while driving or operating machinery.
+                </p>
+              </div>
+            </div>
           </div>
         </div>
 

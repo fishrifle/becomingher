@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import Image from "next/image";
+import { useState, useRef, useEffect } from "react";
 
 interface Chakra {
   id: number;
@@ -19,6 +20,83 @@ interface Chakra {
 export default function ChakraPage() {
   const [selectedChakra, setSelectedChakra] = useState<number | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [volume, setVolume] = useState(0.3);
+  const audioContextRef = useRef<AudioContext | null>(null);
+  const oscillatorRef = useRef<OscillatorNode | null>(null);
+  const gainNodeRef = useRef<GainNode | null>(null);
+
+  // Initialize Web Audio API
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      audioContextRef.current = new (window.AudioContext || (window as any).webkitAudioContext)();
+    }
+
+    return () => {
+      if (oscillatorRef.current) {
+        oscillatorRef.current.stop();
+      }
+      if (audioContextRef.current) {
+        audioContextRef.current.close();
+      }
+    };
+  }, []);
+
+  const playFrequency = (frequency: string) => {
+    // Stop any currently playing sound
+    stopFrequency();
+
+    if (!audioContextRef.current) return;
+
+    // Parse frequency (e.g., "396 Hz" -> 396)
+    const freq = parseInt(frequency.replace(' Hz', ''));
+
+    // Create oscillator and gain nodes
+    const oscillator = audioContextRef.current.createOscillator();
+    const gainNode = audioContextRef.current.createGain();
+
+    oscillator.type = 'sine'; // Sine wave for pure tone
+    oscillator.frequency.setValueAtTime(freq, audioContextRef.current.currentTime);
+
+    // Set volume
+    gainNode.gain.setValueAtTime(volume, audioContextRef.current.currentTime);
+
+    // Connect nodes
+    oscillator.connect(gainNode);
+    gainNode.connect(audioContextRef.current.destination);
+
+    // Start playing
+    oscillator.start();
+
+    oscillatorRef.current = oscillator;
+    gainNodeRef.current = gainNode;
+    setIsPlaying(true);
+  };
+
+  const stopFrequency = () => {
+    if (oscillatorRef.current) {
+      oscillatorRef.current.stop();
+      oscillatorRef.current = null;
+    }
+    if (gainNodeRef.current) {
+      gainNodeRef.current = null;
+    }
+    setIsPlaying(false);
+  };
+
+  const togglePlay = () => {
+    if (isPlaying) {
+      stopFrequency();
+    } else if (selectedChakraData) {
+      playFrequency(selectedChakraData.frequency);
+    }
+  };
+
+  const updateVolume = (newVolume: number) => {
+    setVolume(newVolume);
+    if (gainNodeRef.current && audioContextRef.current) {
+      gainNodeRef.current.gain.setValueAtTime(newVolume, audioContextRef.current.currentTime);
+    }
+  };
 
   const chakras: Chakra[] = [
     {
@@ -162,21 +240,35 @@ export default function ChakraPage() {
       </header>
 
       <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
-        <div className="text-center mb-12">
-          <div className="text-5xl mb-4">🎵</div>
-          <h2 className="text-3xl sm:text-4xl font-bold mb-4">
-            Sound Healing for Your Journey
-          </h2>
-          <p className="text-lg text-foreground/70 max-w-2xl mx-auto mb-6">
-            Each chakra resonates with specific healing frequencies. Use these sounds to
-            balance your energy centers, support your transition, and connect with your
-            authentic feminine essence.
-          </p>
-          <div className="inline-block bg-accent/50 border border-primary/30 rounded-lg px-6 py-3">
-            <p className="text-sm text-foreground/80">
-              🎧 <strong>Best Practice:</strong> Use headphones and listen in a quiet space.
-              Even 5-10 minutes can have a profound effect.
-            </p>
+        {/* Hero Image */}
+        <div className="relative rounded-3xl overflow-hidden mb-12 border-2 border-purple-300/30">
+          <div className="relative h-72">
+            <Image
+              src="https://images.unsplash.com/photo-1528715471579-d1bcf0ba5e83?w=1600&q=80"
+              alt="Peaceful meditation and chakra healing"
+              fill
+              className="object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent"></div>
+          </div>
+          <div className="absolute inset-0 flex items-center justify-center text-center px-4">
+            <div>
+              <div className="text-5xl mb-4">🎵✨🌈</div>
+              <h2 className="text-3xl sm:text-4xl font-bold mb-4 text-white drop-shadow-2xl">
+                Sound Healing for Your Journey
+              </h2>
+              <p className="text-lg text-white/95 max-w-2xl mx-auto mb-6 drop-shadow-lg">
+                Each chakra resonates with specific healing frequencies. Use these sounds to
+                balance your energy centers, support your transition, and connect with your
+                authentic feminine essence.
+              </p>
+              <div className="inline-block bg-white/20 backdrop-blur-sm border border-white/40 rounded-lg px-6 py-3">
+                <p className="text-sm text-white/95 drop-shadow">
+                  🎧 <strong>Best Practice:</strong> Use headphones and listen in a quiet space.
+                  Even 5-10 minutes can have a profound effect.
+                </p>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -335,8 +427,8 @@ export default function ChakraPage() {
               </div>
               <button
                 onClick={() => {
+                  stopFrequency();
                   setSelectedChakra(null);
-                  setIsPlaying(false);
                 }}
                 className="p-2 rounded-lg hover:bg-primary/10 transition-colors"
               >
@@ -384,7 +476,7 @@ export default function ChakraPage() {
 
             <div className="bg-accent/30 rounded-xl p-6 text-center">
               <button
-                onClick={() => setIsPlaying(!isPlaying)}
+                onClick={togglePlay}
                 className="bg-gradient-to-r from-primary to-secondary text-white p-4 rounded-full hover:opacity-90 transition-opacity mb-4"
               >
                 {isPlaying ? (
@@ -397,9 +489,31 @@ export default function ChakraPage() {
                   </svg>
                 )}
               </button>
-              <p className="text-sm text-foreground/60">
+              <p className="text-sm text-foreground/60 mb-4">
                 {isPlaying ? `Playing ${selectedChakraData.frequency}` : `Play ${selectedChakraData.frequency} frequency`}
               </p>
+
+              {/* Volume Control */}
+              <div className="max-w-xs mx-auto">
+                <div className="flex items-center gap-3">
+                  <svg className="w-5 h-5 text-foreground/60" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z" />
+                  </svg>
+                  <input
+                    type="range"
+                    min="0"
+                    max="1"
+                    step="0.01"
+                    value={volume}
+                    onChange={(e) => updateVolume(parseFloat(e.target.value))}
+                    className="flex-1 h-2 bg-primary/20 rounded-lg appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-primary [&::-moz-range-thumb]:w-4 [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:bg-primary [&::-moz-range-thumb]:border-0"
+                  />
+                  <svg className="w-5 h-5 text-foreground/60" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z" />
+                  </svg>
+                </div>
+                <p className="text-xs text-foreground/50 mt-2">Volume: {Math.round(volume * 100)}%</p>
+              </div>
             </div>
           </div>
         </div>
