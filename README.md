@@ -1,4 +1,4 @@
-# Becoming Her 💕
+# Becoming Her 💕 
 
 A supportive Next.js web application designed specifically for women, especially trans women on HRT, to support their transformation journey.
 
