@@ -20,10 +20,14 @@ interface Chakra {
 export default function ChakraPage() {
   const [selectedChakra, setSelectedChakra] = useState<number | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [isFlowPlaying, setIsFlowPlaying] = useState(false);
+  const [currentFlowChakra, setCurrentFlowChakra] = useState<number | null>(null);
   const [volume, setVolume] = useState(0.3);
+  const [chakraDuration, setChakraDuration] = useState(120); // 2 minutes per chakra
   const audioContextRef = useRef<AudioContext | null>(null);
   const oscillatorRef = useRef<OscillatorNode | null>(null);
   const gainNodeRef = useRef<GainNode | null>(null);
+  const flowTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   // Initialize Web Audio API
   useEffect(() => {
@@ -38,10 +42,13 @@ export default function ChakraPage() {
       if (audioContextRef.current) {
         audioContextRef.current.close();
       }
+      if (flowTimeoutRef.current) {
+        clearTimeout(flowTimeoutRef.current);
+      }
     };
   }, []);
 
-  const playFrequency = (frequency: string) => {
+  const playFrequency = (frequency: string, fadeIn: boolean = true) => {
     // Stop any currently playing sound
     stopFrequency();
 
@@ -57,8 +64,13 @@ export default function ChakraPage() {
     oscillator.type = 'sine'; // Sine wave for pure tone
     oscillator.frequency.setValueAtTime(freq, audioContextRef.current.currentTime);
 
-    // Set volume
-    gainNode.gain.setValueAtTime(volume, audioContextRef.current.currentTime);
+    // Smooth fade in for better listening experience
+    if (fadeIn) {
+      gainNode.gain.setValueAtTime(0, audioContextRef.current.currentTime);
+      gainNode.gain.linearRampToValueAtTime(volume, audioContextRef.current.currentTime + 2);
+    } else {
+      gainNode.gain.setValueAtTime(volume, audioContextRef.current.currentTime);
+    }
 
     // Connect nodes
     oscillator.connect(gainNode);
@@ -72,13 +84,27 @@ export default function ChakraPage() {
     setIsPlaying(true);
   };
 
-  const stopFrequency = () => {
-    if (oscillatorRef.current) {
-      oscillatorRef.current.stop();
-      oscillatorRef.current = null;
-    }
-    if (gainNodeRef.current) {
-      gainNodeRef.current = null;
+  const stopFrequency = (fadeOut: boolean = false) => {
+    if (fadeOut && gainNodeRef.current && audioContextRef.current) {
+      // Fade out smoothly
+      gainNodeRef.current.gain.linearRampToValueAtTime(0, audioContextRef.current.currentTime + 1.5);
+      setTimeout(() => {
+        if (oscillatorRef.current) {
+          oscillatorRef.current.stop();
+          oscillatorRef.current = null;
+        }
+        if (gainNodeRef.current) {
+          gainNodeRef.current = null;
+        }
+      }, 1500);
+    } else {
+      if (oscillatorRef.current) {
+        oscillatorRef.current.stop();
+        oscillatorRef.current = null;
+      }
+      if (gainNodeRef.current) {
+        gainNodeRef.current = null;
+      }
     }
     setIsPlaying(false);
   };
@@ -96,6 +122,45 @@ export default function ChakraPage() {
     if (gainNodeRef.current && audioContextRef.current) {
       gainNodeRef.current.gain.setValueAtTime(newVolume, audioContextRef.current.currentTime);
     }
+  };
+
+  const playChakraFlow = () => {
+    setIsFlowPlaying(true);
+    playNextChakraInFlow(1);
+  };
+
+  const playNextChakraInFlow = (chakraId: number) => {
+    if (chakraId > 7) {
+      // Flow complete
+      setIsFlowPlaying(false);
+      setCurrentFlowChakra(null);
+      stopFrequency(true);
+      return;
+    }
+
+    const chakra = chakras.find(c => c.id === chakraId);
+    if (!chakra) return;
+
+    setCurrentFlowChakra(chakraId);
+    playFrequency(chakra.frequency);
+
+    // Schedule next chakra
+    flowTimeoutRef.current = setTimeout(() => {
+      stopFrequency(true);
+      setTimeout(() => {
+        playNextChakraInFlow(chakraId + 1);
+      }, 2000); // 2 second pause between chakras
+    }, chakraDuration * 1000);
+  };
+
+  const stopChakraFlow = () => {
+    setIsFlowPlaying(false);
+    setCurrentFlowChakra(null);
+    if (flowTimeoutRef.current) {
+      clearTimeout(flowTimeoutRef.current);
+      flowTimeoutRef.current = null;
+    }
+    stopFrequency(true);
   };
 
   const chakras: Chakra[] = [
@@ -272,12 +337,128 @@ export default function ChakraPage() {
           </div>
         </div>
 
+        {/* Chakra Flow Player */}
+        <div className="bg-gradient-to-br from-primary/20 to-secondary/20 border-2 border-primary/30 rounded-3xl p-8 mb-12">
+          <div className="text-center mb-6">
+            <h2 className="text-3xl font-bold mb-3 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+              Full Chakra Meditation Flow
+            </h2>
+            <p className="text-foreground/70">
+              Experience all 7 chakras in sequence, from Root to Crown. Each chakra plays for {chakraDuration / 60} minutes.
+            </p>
+          </div>
+
+          {isFlowPlaying && currentFlowChakra && (
+            <div className="mb-6 text-center">
+              <div className="inline-block bg-accent/50 border border-primary/30 rounded-2xl px-8 py-4">
+                <p className="text-sm text-foreground/60 mb-2">Currently Playing:</p>
+                <p className="text-2xl font-bold text-primary">
+                  {chakras.find(c => c.id === currentFlowChakra)?.name}
+                </p>
+                <p className="text-lg text-foreground/70">
+                  {chakras.find(c => c.id === currentFlowChakra)?.frequency}
+                </p>
+                <div className="flex justify-center gap-1 mt-4">
+                  {[1, 2, 3, 4, 5, 6, 7].map((id) => (
+                    <div
+                      key={id}
+                      className={`w-3 h-3 rounded-full transition-all ${
+                        id === currentFlowChakra
+                          ? 'bg-primary scale-125'
+                          : id < currentFlowChakra
+                          ? 'bg-primary/50'
+                          : 'bg-foreground/20'
+                      }`}
+                    />
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
+          <div className="flex flex-col sm:flex-row gap-4 items-center justify-center mb-6">
+            <button
+              onClick={isFlowPlaying ? stopChakraFlow : playChakraFlow}
+              className={`${
+                isFlowPlaying
+                  ? 'bg-red-500 hover:bg-red-600'
+                  : 'bg-gradient-to-r from-primary to-secondary hover:opacity-90'
+              } text-white px-8 py-4 rounded-xl font-semibold text-lg transition-all shadow-lg flex items-center gap-3`}
+            >
+              {isFlowPlaying ? (
+                <>
+                  <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z" />
+                  </svg>
+                  Stop Flow
+                </>
+              ) : (
+                <>
+                  <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M8 5v14l11-7z" />
+                  </svg>
+                  Start Full Chakra Flow
+                </>
+              )}
+            </button>
+
+            <div className="flex items-center gap-3">
+              <label className="text-sm font-medium">Duration per chakra:</label>
+              <select
+                value={chakraDuration}
+                onChange={(e) => setChakraDuration(Number(e.target.value))}
+                disabled={isFlowPlaying}
+                className="bg-background/50 border border-primary/20 rounded-lg px-4 py-2 focus:outline-none focus:border-primary/50"
+              >
+                <option value={60}>1 minute</option>
+                <option value={120}>2 minutes</option>
+                <option value={180}>3 minutes</option>
+                <option value={300}>5 minutes</option>
+                <option value={600}>10 minutes</option>
+              </select>
+            </div>
+          </div>
+
+          <div className="flex flex-col items-center gap-3">
+            <div className="text-center text-sm text-foreground/60">
+              <p>Total meditation time: {(chakraDuration * 7) / 60} minutes</p>
+            </div>
+
+            {/* Volume Control */}
+            <div className="w-full max-w-md">
+              <div className="flex items-center gap-3 bg-accent/30 rounded-lg p-4">
+                <svg className="w-5 h-5 text-foreground/60" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z" />
+                </svg>
+                <input
+                  type="range"
+                  min="0"
+                  max="1"
+                  step="0.01"
+                  value={volume}
+                  onChange={(e) => updateVolume(parseFloat(e.target.value))}
+                  className="flex-1 h-2 bg-primary/20 rounded-lg appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-primary [&::-moz-range-thumb]:w-4 [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:bg-primary [&::-moz-range-thumb]:border-0"
+                />
+                <svg className="w-5 h-5 text-foreground/60" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z" />
+                </svg>
+                <span className="text-sm text-foreground/60 min-w-[3rem]">{Math.round(volume * 100)}%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
           {chakras.map((chakra) => (
             <div
               key={chakra.id}
-              onClick={() => setSelectedChakra(chakra.id)}
-              className="group relative bg-accent/30 hover:bg-accent/50 border border-primary/20 hover:border-primary/40 rounded-2xl p-6 transition-all duration-300 hover:shadow-lg cursor-pointer"
+              onClick={() => {
+                if (isFlowPlaying) stopChakraFlow();
+                setSelectedChakra(chakra.id);
+              }}
+              className={`group relative bg-accent/30 hover:bg-accent/50 border border-primary/20 hover:border-primary/40 rounded-2xl p-6 transition-all duration-300 hover:shadow-lg cursor-pointer ${
+                currentFlowChakra === chakra.id ? 'ring-2 ring-primary shadow-xl scale-105' : ''
+              }`}
               style={{
                 borderLeftWidth: '4px',
                 borderLeftColor: chakra.color.toLowerCase()

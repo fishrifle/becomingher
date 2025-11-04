@@ -11,6 +11,7 @@ export default function Routine1() {
     {
       name: "Mountain Pose (Tadasana)",
       duration: "1 minute",
+      image: "https://media.istockphoto.com/id/546802712/photo/attractive-fit-young-woman-doing-mountain-pose-in-white-loft.jpg?s=2048x2048&w=is&k=20&c=6HgeHHhd4qPZvZ6yXE1zZm2Wr8Zw5tunowkW4fJU7o4=",
       instructions: [
         "Stand with feet hip-width apart, toes pointing forward",
         "Ground down through all four corners of your feet",
@@ -26,6 +27,7 @@ export default function Routine1() {
     {
       name: "Cat-Cow Flow (Marjaryasana-Bitilasana)",
       duration: "2 minutes",
+      image: "https://media.istockphoto.com/id/172765873/photo/woman-in-cat-cow-pose.jpg?s=2048x2048&w=is&k=20&c=UNJyNrXTegTPLAnGDzqp6HkE9Awg3ypuyyV9hDVg-ps=",
       instructions: [
         "Come to hands and knees, wrists under shoulders, knees under hips",
         "Inhale: Drop belly, lift chest and tailbone (Cow)",
@@ -41,6 +43,7 @@ export default function Routine1() {
     {
       name: "Goddess Pose (Utkata Konasana)",
       duration: "1.5 minutes",
+      image: "https://media.istockphoto.com/id/942282226/photo/a-pose-of-the-goddess-the-portrait-of-the-beautiful-young-woman-works-against-a-white-brick.jpg?s=2048x2048&w=is&k=20&c=FoZeoycqOX6O8KGxcNyaZ2UzXjEtlxEFJ1fHJLcTHEo=",
       instructions: [
         "Step feet wide apart, turn toes out at 45 degrees",
         "Bend knees deeply, tracking over your toes",
@@ -56,6 +59,7 @@ export default function Routine1() {
     {
       name: "Crescent Moon Pose (Low Lunge)",
       duration: "1 minute each side",
+      image: "https://media.istockphoto.com/id/1152625683/photo/woman-practicing-yoga-standing-in-anjaneyasana-pose-horse-rider-exercise.jpg?s=2048x2048&w=is&k=20&c=1U_IP_An1L_Q0V-yiGWrNRkHEHmJpXno9bLcr9wgaas=",
       instructions: [
         "From Mountain Pose, step right foot back into a lunge",
         "Lower right knee to the ground",
@@ -72,6 +76,7 @@ export default function Routine1() {
     {
       name: "Flowing Warrior II (Virabhadrasana II)",
       duration: "1.5 minutes each side",
+      image: "https://media.istockphoto.com/id/153225548/photo/warrior-pose.jpg?s=2048x2048&w=is&k=20&c=6oQVUCTdGlXVknGPlpdglW8YXY96sLEEiEOuZCEscVU=",
       instructions: [
         "Step feet wide, turn right foot out, left foot slightly in",
         "Bend right knee over right ankle",
@@ -88,6 +93,7 @@ export default function Routine1() {
     {
       name: "Heart-Opening Cobra (Bhujangasana)",
       duration: "1 minute",
+      image: "https://media.istockphoto.com/id/667293804/photo/young-yogi-attractive-woman-in-cobra-pose-white-loft-background.jpg?s=2048x2048&w=is&k=20&c=BMnnsmWa8iYJ8NQeEBM1jh-fq9GT85CfI6xO7tlabNE=",
       instructions: [
         "Lie on your belly, legs extended behind you",
         "Place palms under shoulders",
@@ -103,6 +109,7 @@ export default function Routine1() {
     {
       name: "Hip Circles in Tabletop",
       duration: "2 minutes",
+      video: "https://www.youtube.com/embed/vEwOjVe7Q7k",
       instructions: [
         "Return to hands and knees",
         "Begin to make slow, sensual circles with your hips",
@@ -118,6 +125,7 @@ export default function Routine1() {
     {
       name: "Child's Pose (Balasana)",
       duration: "2 minutes",
+      image: "https://www.vinyasayogaashram.com/blog/wp-content/uploads/2023/02/Child-Pose.jpg",
       instructions: [
         "From hands and knees, bring big toes together",
         "Separate knees wide",
@@ -133,6 +141,7 @@ export default function Routine1() {
     {
       name: "Supine Twist",
       duration: "1.5 minutes each side",
+      image: "https://www.doyou.com/wp-content/uploads/2021/01/How-To-Do-Reclined-Spinal-Twist-Pose.jpg",
       instructions: [
         "Lie on your back, draw knees into chest",
         "Extend arms to a T position",
@@ -148,6 +157,7 @@ export default function Routine1() {
     {
       name: "Legs Up the Wall (Viparita Karani)",
       duration: "3 minutes",
+      image: "https://www.gaia.com/wp-content/uploads/1920x1080_viparita_karani_legs_wall_pose.jpg",
       instructions: [
         "Sit sideways against a wall",
         "Swing legs up the wall as you lie back",
@@ -163,6 +173,7 @@ export default function Routine1() {
     {
       name: "Final Relaxation (Savasana)",
       duration: "3 minutes",
+      image: "https://beyogi.b-cdn.net/wp-content/uploads/2017/09/Stillness_Feature.jpg?width=600&quality=70",
       instructions: [
         "Lie on your back, legs extended and separated",
         "Arms slightly away from body, palms facing up",
@@ -232,6 +243,26 @@ export default function Routine1() {
 
         {/* Current pose */}
         <div className="bg-accent/30 border border-primary/20 rounded-2xl p-6 sm:p-8 mb-6">
+          {/* Pose Image or Video */}
+          <div className="relative h-80 w-full rounded-xl overflow-hidden mb-6 border border-primary/20" suppressHydrationWarning>
+            {poses[currentPose].video ? (
+              <iframe
+                src={poses[currentPose].video}
+                className="w-full h-full"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                title={poses[currentPose].name}
+              />
+            ) : (
+              <Image
+                src={poses[currentPose].image}
+                alt={poses[currentPose].name}
+                fill
+                className="object-contain bg-accent/10"
+              />
+            )}
+          </div>
+
           <h2 className="text-2xl sm:text-3xl font-bold mb-2">{poses[currentPose].name}</h2>
           <p className="text-primary font-medium mb-6">Duration: {poses[currentPose].duration}</p>
 
