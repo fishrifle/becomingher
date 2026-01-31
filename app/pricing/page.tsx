@@ -1,10 +1,61 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useUser } from "@clerk/nextjs";
 
 export default function PricingPage() {
   const [billingPeriod, setBillingPeriod] = useState<"monthly" | "yearly">("monthly");
+  const [loading, setLoading] = useState(false);
+  const [currentTier, setCurrentTier] = useState<"free" | "premium">("free");
+  const { user } = useUser();
+
+  useEffect(() => {
+    async function checkSubscription() {
+      try {
+        const res = await fetch("/api/subscription");
+        const data = await res.json();
+        setCurrentTier(data.tier);
+      } catch {}
+    }
+    if (user) checkSubscription();
+  }, [user]);
+
+  async function handleCheckout(priceId: string) {
+    if (!user) {
+      window.location.href = "/sign-in";
+      return;
+    }
+    setLoading(true);
+    try {
+      const res = await fetch("/api/create-checkout-session", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ priceId, userId: user.id }),
+      });
+      const data = await res.json();
+      if (data.url) {
+        window.location.href = data.url;
+      }
+    } catch (err) {
+      console.error("Checkout error:", err);
+      setLoading(false);
+    }
+  }
+
+  async function handleManageSubscription() {
+    setLoading(true);
+    try {
+      const res = await fetch("/api/create-portal-session", { method: "POST" });
+      const data = await res.json();
+      if (data.url) {
+        window.location.href = data.url;
+      }
+    } catch (err) {
+      console.error("Portal error:", err);
+      setLoading(false);
+    }
+  }
 
   const plans = [
     {
@@ -46,6 +97,9 @@ export default function PricingPage() {
       borderColor: "border-pink-400/60"
     }
   ];
+
+  const monthlyPriceId = process.env.NEXT_PUBLIC_STRIPE_PRICE_ID_MONTHLY!;
+  const yearlyPriceId = process.env.NEXT_PUBLIC_STRIPE_PRICE_ID_YEARLY!;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-pink-50/5 to-purple-50/5">
@@ -130,13 +184,38 @@ export default function PricingPage() {
                 </div>
 
                 {/* CTA Button */}
-                <button className="w-full py-4 px-6 rounded-xl font-bold text-white bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600 transition-all duration-300 hover:scale-105 shadow-lg mb-8">
-                  {plan.cta}
-                </button>
+                {plan.name === "Free" ? (
+                  <Link
+                    href="/"
+                    className="block w-full py-4 px-6 rounded-xl font-bold text-white bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600 transition-all duration-300 hover:scale-105 shadow-lg mb-8 text-center"
+                  >
+                    {plan.cta}
+                  </Link>
+                ) : currentTier === "premium" ? (
+                  <button
+                    onClick={handleManageSubscription}
+                    disabled={loading}
+                    className="w-full py-4 px-6 rounded-xl font-bold text-white bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600 transition-all duration-300 hover:scale-105 shadow-lg mb-8 disabled:opacity-50"
+                  >
+                    {loading ? "Loading..." : "Manage Subscription"}
+                  </button>
+                ) : (
+                  <button
+                    onClick={() =>
+                      handleCheckout(
+                        billingPeriod === "monthly" ? monthlyPriceId : yearlyPriceId
+                      )
+                    }
+                    disabled={loading}
+                    className="w-full py-4 px-6 rounded-xl font-bold text-white bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600 transition-all duration-300 hover:scale-105 shadow-lg mb-8 disabled:opacity-50"
+                  >
+                    {loading ? "Redirecting to checkout..." : plan.cta}
+                  </button>
+                )}
 
                 {/* Features */}
                 <div className="space-y-3">
-                  <p className="font-semibold text-foreground mb-4">What's included:</p>
+                  <p className="font-semibold text-foreground mb-4">What&apos;s included:</p>
                   {plan.features.map((feature, index) => (
                     <div key={index} className="flex items-start gap-3">
                       <svg className="w-5 h-5 text-pink-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
@@ -191,7 +270,7 @@ export default function PricingPage() {
         {/* Support Message */}
         <div className="mt-16 text-center p-8 bg-gradient-to-r from-pink-100/20 via-purple-100/20 to-pink-100/20 rounded-3xl border-2 border-pink-300/30">
           <p className="text-lg text-foreground/80">
-            💝 Questions? We're here to help! Email us at{" "}
+            💝 Questions? We&apos;re here to help! Email us at{" "}
             <a href="mailto:support@becomingher.app" className="text-pink-500 hover:text-purple-500 font-semibold">
               support@becomingher.app
             </a>
@@ -203,7 +282,7 @@ export default function PricingPage() {
       <footer className="bg-gradient-to-r from-pink-100/10 via-purple-100/10 to-pink-100/10 border-t-2 border-pink-300/20 py-8 mt-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-foreground/70">
           <p>Made with SO much love for your beautiful transformation journey 💕✨🌸</p>
-          <p className="text-sm mt-2 text-pink-400">You're doing amazing, gorgeous! Keep being you! 💖</p>
+          <p className="text-sm mt-2 text-pink-400">You&apos;re doing amazing, gorgeous! Keep being you! 💖</p>
         </div>
       </footer>
     </div>

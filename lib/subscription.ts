@@ -1,5 +1,7 @@
 // Premium content gating utilities
 
+import { getSupabaseAdmin } from "./supabase";
+
 export type SubscriptionTier = "free" | "premium";
 
 // Features available for each tier
@@ -55,9 +57,29 @@ export function isPremiumContent(contentType: string): boolean {
   return premiumContent.some((premium) => contentType.includes(premium));
 }
 
-// Get user's subscription tier (mock for now - replace with database lookup)
+// Get user's subscription tier from Supabase
 export async function getUserSubscriptionTier(userId: string): Promise<SubscriptionTier> {
-  // TODO: Replace with actual database lookup
-  // For now, return "free" - you'll implement database storage later
-  return "free";
+  try {
+    const supabase = getSupabaseAdmin();
+    const { data, error } = await supabase
+      .from("subscriptions")
+      .select("tier, status, current_period_end")
+      .eq("user_id", userId)
+      .single();
+
+    if (error || !data) return "free";
+
+    // Check if subscription is active and not expired
+    if (
+      data.tier === "premium" &&
+      data.status === "active" &&
+      new Date(data.current_period_end) > new Date()
+    ) {
+      return "premium";
+    }
+
+    return "free";
+  } catch {
+    return "free";
+  }
 }

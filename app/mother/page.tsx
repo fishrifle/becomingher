@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
+import PremiumGate from "@/components/PremiumGate";
 
 interface Message {
   id: number;
@@ -295,6 +296,7 @@ export default function MotherPage() {
   };
 
   return (
+    <PremiumGate>
     <div className="min-h-screen flex flex-col">
       <header className="bg-primary/10 backdrop-blur-sm border-b border-primary/20 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
@@ -538,5 +540,6 @@ export default function MotherPage() {
         </div>
       </main>
     </div>
+    </PremiumGate>
   );
 }

@@ -3,6 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useState, useRef, useEffect } from "react";
+import PremiumGate from "@/components/PremiumGate";
 
 interface Chakra {
   id: number;
@@ -288,6 +289,7 @@ export default function ChakraPage() {
   const selectedChakraData = chakras.find(c => c.id === selectedChakra);
 
   return (
+    <PremiumGate>
     <div className="min-h-screen flex flex-col">
       <header className="bg-primary/10 backdrop-blur-sm border-b border-primary/20 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
@@ -700,5 +702,6 @@ export default function ChakraPage() {
         </div>
       )}
     </div>
+    </PremiumGate>
   );
 }

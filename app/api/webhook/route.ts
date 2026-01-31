@@ -1,10 +1,13 @@
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
 import { headers } from "next/headers";
+import { getSupabaseAdmin } from "@/lib/supabase";
 
 export async function POST(req: Request) {
   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
   const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET!;
+  const supabase = getSupabaseAdmin();
+
   try {
     const body = await req.text();
     const signature = (await headers()).get("stripe-signature")!;
@@ -21,28 +24,64 @@ export async function POST(req: Request) {
       );
     }
 
-    // Handle the event
     switch (event.type) {
-      case "checkout.session.completed":
+      case "checkout.session.completed": {
         const session = event.data.object as Stripe.Checkout.Session;
-        // Update user subscription status in your database
-        console.log("Subscription created:", session);
-        // TODO: Store subscription data in database
-        break;
+        const userId = session.client_reference_id || session.metadata?.userId;
 
-      case "customer.subscription.deleted":
+        if (userId && session.subscription) {
+          // Fetch the subscription to get period end
+          const subscription = await stripe.subscriptions.retrieve(
+            session.subscription as string
+          );
+
+          await supabase.from("subscriptions").upsert({
+            user_id: userId,
+            stripe_customer_id: session.customer as string,
+            stripe_subscription_id: session.subscription as string,
+            tier: "premium",
+            status: "active",
+            current_period_end: new Date(
+              subscription.current_period_end * 1000
+            ).toISOString(),
+            updated_at: new Date().toISOString(),
+          });
+        }
+        break;
+      }
+
+      case "customer.subscription.updated": {
         const subscription = event.data.object as Stripe.Subscription;
-        // Handle subscription cancellation
-        console.log("Subscription cancelled:", subscription);
-        // TODO: Update user subscription status in database
-        break;
 
-      case "customer.subscription.updated":
-        const updatedSubscription = event.data.object as Stripe.Subscription;
-        // Handle subscription updates
-        console.log("Subscription updated:", updatedSubscription);
-        // TODO: Update subscription data in database
+        const status =
+          subscription.status === "active" ? "active" : subscription.status;
+
+        await supabase
+          .from("subscriptions")
+          .update({
+            status,
+            current_period_end: new Date(
+              subscription.current_period_end * 1000
+            ).toISOString(),
+            updated_at: new Date().toISOString(),
+          })
+          .eq("stripe_subscription_id", subscription.id);
         break;
+      }
+
+      case "customer.subscription.deleted": {
+        const subscription = event.data.object as Stripe.Subscription;
+
+        await supabase
+          .from("subscriptions")
+          .update({
+            tier: "free",
+            status: "canceled",
+            updated_at: new Date().toISOString(),
+          })
+          .eq("stripe_subscription_id", subscription.id);
+        break;
+      }
 
       default:
         console.log(`Unhandled event type: ${event.type}`);
