@@ -235,9 +235,9 @@ export default function Routine2() {
         <div className="bg-accent/30 border border-primary/20 rounded-2xl p-6 sm:p-8 mb-6">
           {/* Pose Image or Video */}
           <div className="relative h-80 w-full rounded-xl overflow-hidden mb-6 border border-primary/20" suppressHydrationWarning>
-            {poses[currentPose].video ? (
+            {(poses[currentPose] as any).video ? (
               <iframe
-                src={poses[currentPose].video}
+                src={(poses[currentPose] as any).video}
                 className="w-full h-full"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
