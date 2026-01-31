@@ -31,9 +31,9 @@ export async function POST(req: Request) {
 
         if (userId && session.subscription) {
           // Fetch the subscription to get period end
-          const subscription = await stripe.subscriptions.retrieve(
-            session.subscription as string
-          );
+          // Set period end to 30 days from now as default; webhook updates will keep it current
+          const periodEnd = new Date();
+          periodEnd.setDate(periodEnd.getDate() + 30);
 
           await supabase.from("subscriptions").upsert({
             user_id: userId,
@@ -41,9 +41,7 @@ export async function POST(req: Request) {
             stripe_subscription_id: session.subscription as string,
             tier: "premium",
             status: "active",
-            current_period_end: new Date(
-              subscription.current_period_end * 1000
-            ).toISOString(),
+            current_period_end: periodEnd.toISOString(),
             updated_at: new Date().toISOString(),
           });
         }
@@ -51,26 +49,23 @@ export async function POST(req: Request) {
       }
 
       case "customer.subscription.updated": {
-        const subscription = event.data.object as Stripe.Subscription;
-
-        const status =
-          subscription.status === "active" ? "active" : subscription.status;
+        const sub = event.data.object as any;
 
         await supabase
           .from("subscriptions")
           .update({
-            status,
+            status: sub.status === "active" ? "active" : sub.status,
             current_period_end: new Date(
-              subscription.current_period_end * 1000
+              sub.current_period_end * 1000
             ).toISOString(),
             updated_at: new Date().toISOString(),
           })
-          .eq("stripe_subscription_id", subscription.id);
+          .eq("stripe_subscription_id", sub.id);
         break;
       }
 
       case "customer.subscription.deleted": {
-        const subscription = event.data.object as Stripe.Subscription;
+        const sub = event.data.object as any;
 
         await supabase
           .from("subscriptions")
@@ -79,7 +74,7 @@ export async function POST(req: Request) {
             status: "canceled",
             updated_at: new Date().toISOString(),
           })
-          .eq("stripe_subscription_id", subscription.id);
+          .eq("stripe_subscription_id", sub.id);
         break;
       }
 
