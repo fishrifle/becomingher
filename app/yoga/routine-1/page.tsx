@@ -255,7 +255,7 @@ export default function Routine1() {
               />
             ) : (
               <Image
-                src={poses[currentPose].image}
+                src={poses[currentPose].image || ""}
                 alt={poses[currentPose].name}
                 fill
                 className="object-contain bg-accent/10"
