@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
+import { useUser } from "@clerk/nextjs";
 import PremiumGate from "@/components/PremiumGate";
 
 interface Message {
@@ -11,7 +12,49 @@ interface Message {
   timestamp: Date;
 }
 
+const ALL_PROMPTS = [
+  "I'm having a rough day",
+  "I need some encouragement",
+  "I'm struggling with dysphoria today",
+  "Something good happened!",
+  "I'm nervous about coming out to someone",
+  "Can we just talk?",
+  "I need help with confidence",
+  "I had a win today!",
+  "I'm feeling really alone",
+  "Tell me something nice",
+  "I'm anxious about my appearance",
+  "I need advice about HRT",
+  "I'm feeling beautiful today",
+  "I don't know who I can trust",
+  "I'm scared about the future",
+  "Can you help me process something?",
+];
+
+function QuickPrompts({ onSelect }: { onSelect: (prompt: string) => void }) {
+  const [prompts] = useState(() => {
+    const shuffled = [...ALL_PROMPTS].sort(() => Math.random() - 0.5);
+    return shuffled.slice(0, 4);
+  });
+
+  return (
+    <div className="mt-3 flex flex-wrap gap-2">
+      {prompts.map((prompt) => (
+        <button
+          key={prompt}
+          onClick={() => onSelect(prompt)}
+          className="text-xs bg-accent/50 hover:bg-accent/70 border border-primary/20 px-3 py-1.5 rounded-full transition-colors"
+        >
+          {prompt}
+        </button>
+      ))}
+    </div>
+  );
+}
+
 export default function MotherPage() {
+  const { user } = useUser();
+  const userName = user?.firstName || "sweetheart";
   const [messages, setMessages] = useState<Message[]>([]);
   const [isInitialized, setIsInitialized] = useState(false);
 
@@ -22,13 +65,13 @@ export default function MotherPage() {
         {
           id: 1,
           sender: "mother",
-          content: "Hello, my beautiful daughter. I'm Mother—your AI support companion. I'm here to listen, encourage, and support you on your journey. How are you feeling today, Lacey?",
+          content: `Hey ${userName}! I'm so glad you're here. I'm Mother — think of me as your biggest cheerleader, your safe space, your person. How are you doing today, really?`,
           timestamp: new Date()
         }
       ]);
       setIsInitialized(true);
     }
-  }, [isInitialized]);
+  }, [isInitialized, userName]);
   const [inputValue, setInputValue] = useState("");
   const [isListening, setIsListening] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
@@ -246,7 +289,7 @@ export default function MotherPage() {
             content: userMessage,
             timestamp: new Date()
           }]),
-          userName: 'Lacey'
+          userName
         }),
       });
 
@@ -441,7 +484,7 @@ export default function MotherPage() {
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
               onKeyPress={(e) => e.key === "Enter" && handleSend()}
-              placeholder={isListening ? "Listening..." : "Share what's on your heart, Lacey..."}
+              placeholder={isListening ? "Listening..." : "Talk to me..."}
               className="flex-1 bg-background/50 border border-primary/20 rounded-lg px-4 py-3 focus:outline-none focus:border-primary/50 placeholder:text-foreground/40"
               disabled={isListening}
             />
@@ -452,32 +495,7 @@ export default function MotherPage() {
               Send
             </button>
           </div>
-          <div className="mt-3 flex flex-wrap gap-2">
-            <button
-              onClick={() => setInputValue("I'm feeling overwhelmed today")}
-              className="text-xs bg-accent/50 hover:bg-accent/70 border border-primary/20 px-3 py-1.5 rounded-full transition-colors"
-            >
-              I'm feeling overwhelmed
-            </button>
-            <button
-              onClick={() => setInputValue("I need encouragement")}
-              className="text-xs bg-accent/50 hover:bg-accent/70 border border-primary/20 px-3 py-1.5 rounded-full transition-colors"
-            >
-              I need encouragement
-            </button>
-            <button
-              onClick={() => setInputValue("I'm struggling with self-acceptance")}
-              className="text-xs bg-accent/50 hover:bg-accent/70 border border-primary/20 px-3 py-1.5 rounded-full transition-colors"
-            >
-              Struggling with self-acceptance
-            </button>
-            <button
-              onClick={() => setInputValue("Tell me I'm doing well")}
-              className="text-xs bg-accent/50 hover:bg-accent/70 border border-primary/20 px-3 py-1.5 rounded-full transition-colors"
-            >
-              Tell me I'm doing well
-            </button>
-          </div>
+          <QuickPrompts onSelect={(prompt) => { setInputValue(prompt); handleSend(prompt); }} />
         </div>
 
         {/* Topics Mother Can Help With */}
