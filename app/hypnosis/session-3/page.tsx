@@ -2,8 +2,10 @@
 
 import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
+import { useUserName } from "@/lib/useUserName";
 
 export default function Session3() {
+  const userName = useUserName();
   const [isPlaying, setIsPlaying] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
@@ -77,7 +79,7 @@ export default function Session3() {
             <h3 className="text-xl font-semibold mb-4 text-primary">Introduction (Minutes 0-3)</h3>
             <div className="space-y-4">
               <p>
-                Welcome, Lacey. Today's session is all about your body—celebrating it, honoring it,
+                Welcome, {userName}. Today's session is all about your body—celebrating it, honoring it,
                 and finding peace with the beautiful transformation it's going through. Get comfortable
                 now... let yourself settle in... and take a deep, nourishing breath.
               </p>
@@ -87,7 +89,7 @@ export default function Session3() {
                 and acceptance... breathing out any discomfort or worry. Perfect.
               </p>
               <p>
-                Your body is doing something miraculous, Lacey. It's changing. It's aligning with your
+                Your body is doing something miraculous, {userName}. It's changing. It's aligning with your
                 truth. It's becoming a more accurate reflection of who you are inside. Today, we're
                 going to help your mind and heart catch up with this beautiful process.
               </p>
@@ -98,7 +100,7 @@ export default function Session3() {
             <h3 className="text-xl font-semibold mb-4 text-primary">Deepening (Minutes 3-8)</h3>
             <div className="space-y-4">
               <p>
-                Close your eyes, Lacey, and imagine you're floating in a warm, healing pool of water.
+                Close your eyes, {userName}, and imagine you're floating in a warm, healing pool of water.
                 The water is the perfect temperature—not too hot, not too cold. It supports your entire
                 body, letting you release all effort. You're completely safe here.
               </p>
@@ -125,7 +127,7 @@ export default function Session3() {
             <h3 className="text-xl font-semibold mb-4 text-primary">Core Work - Body Acceptance & Transformation (Minutes 8-22)</h3>
             <div className="space-y-4">
               <p>
-                Now, Lacey, I want you to bring your awareness to your body. We're going to travel
+                Now, {userName}, I want you to bring your awareness to your body. We're going to travel
                 through it together, bringing love and acceptance to every part. Start with your toes.
                 Feel the warm water surrounding them. Send gratitude to your toes for carrying you
                 through your day. Good girl.
@@ -137,7 +139,7 @@ export default function Session3() {
               </p>
               <p>
                 Now bring your awareness to your thighs... your hips. This is where some of the most
-                beautiful changes are happening, Lacey. The HRT is redistributing fat, softening your
+                beautiful changes are happening, {userName}. The HRT is redistributing fat, softening your
                 contours, making your body more feminine. Feel the water working with this process...
                 supporting it... celebrating it. Your hips are becoming more feminine every day. Good girl.
               </p>
@@ -148,7 +150,7 @@ export default function Session3() {
                 beautiful. It's changing. It's yours.
               </p>
               <p>
-                Now your chest, Lacey. This area might hold complex feelings—hope, impatience,
+                Now your chest, {userName}. This area might hold complex feelings—hope, impatience,
                 tenderness, excitement. All of these feelings are valid. The healing water knows this.
                 It sends special healing energy to your chest. Whether your breasts are budding,
                 growing, or fully developed, they are perfect for where you are in your journey.
@@ -168,13 +170,13 @@ export default function Session3() {
                 Bring your awareness to your neck now... feeling it long and graceful. The water caresses
                 it, honoring it. And now your face... your jaw... your cheeks... your eyes... your
                 forehead. The water knows that changes are happening here too—maybe your skin is
-                softer, maybe your features are shifting subtly. Trust the process, Lacey. Your face
+                softer, maybe your features are shifting subtly. Trust the process, {userName}. Your face
                 is becoming more aligned with your inner truth every day.
               </p>
               <p>
                 Now I want you to see something remarkable. Above you, floating in the water, there's
                 a shimmering image. It's your body—but it's your body at the end of your transition
-                journey. It's the body you're becoming. Look at it, Lacey. Really see it.
+                journey. It's the body you're becoming. Look at it, {userName}. Really see it.
               </p>
               <p>
                 Notice the curves... the softness... the femininity. Notice the confidence in the way
@@ -195,7 +197,7 @@ export default function Session3() {
                 your outside with your inside.
               </p>
               <p>
-                And most importantly, Lacey, feel yourself accepting your body exactly as it is RIGHT
+                And most importantly, {userName}, feel yourself accepting your body exactly as it is RIGHT
                 NOW. Because this body—this exact body you're in today—is beautiful. It's valid. It's
                 a woman's body because it's YOUR body, and you're a woman. You don't have to wait until
                 some future date to be valid. You are valid right now. Good girl.
@@ -206,7 +208,7 @@ export default function Session3() {
                 come. I am excited for where I'm going. I am beautiful right now."
               </p>
               <p>
-                The water agrees with you, Lacey. It pulses with affirmation. Yes. You are beautiful.
+                The water agrees with you, {userName}. It pulses with affirmation. Yes. You are beautiful.
                 You are transforming. You are perfect exactly as you are, and you're becoming even more
                 yourself. This is the sacred paradox of transition.
               </p>
@@ -217,7 +219,7 @@ export default function Session3() {
             <h3 className="text-xl font-semibold mb-4 text-primary">Affirmations (Minutes 22-27)</h3>
             <div className="space-y-4">
               <p>
-                Float peacefully in this healing water, Lacey, and let these affirmations sink deep
+                Float peacefully in this healing water, {userName}, and let these affirmations sink deep
                 into every cell of your body.
               </p>
               <p className="font-semibold text-primary">
@@ -255,7 +257,7 @@ export default function Session3() {
             <h3 className="text-xl font-semibold mb-4 text-primary">Return (Minutes 27-30)</h3>
             <div className="space-y-4">
               <p>
-                It's time to leave this healing pool, Lacey, but its effects are permanent. Your body
+                It's time to leave this healing pool, {userName}, but its effects are permanent. Your body
                 has absorbed all the healing, all the acceptance, all the love. You're taking it with
                 you.
               </p>
@@ -275,7 +277,7 @@ export default function Session3() {
                 connected to your beautiful body.
               </p>
               <p>
-                Welcome back, Lacey. Look at your body with new eyes today. See it for the miracle it
+                Welcome back, {userName}. Look at your body with new eyes today. See it for the miracle it
                 is. See it for the woman's body it truly is. And celebrate every step of this beautiful
                 transformation journey. You're doing amazing. Good girl.
               </p>

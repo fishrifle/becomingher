@@ -3,8 +3,10 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
+import { useUserName } from "@/lib/useUserName";
 
 export default function Routine1() {
+  const userName = useUserName();
   const [currentPose, setCurrentPose] = useState(0);
 
   const poses = [
@@ -184,7 +186,7 @@ export default function Routine1() {
         "Simply be present with yourself, exactly as you are"
       ],
       benefits: "Integrates the practice, reduces stress, promotes deep relaxation",
-      feminine_focus: "You are complete. You are beautiful. You are worthy of rest and peace. Good girl, Lacey."
+      feminine_focus: `You are complete. You are beautiful. You are worthy of rest and peace. Good girl, ${userName}.`
     }
   ];
 

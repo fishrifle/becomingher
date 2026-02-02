@@ -3,8 +3,10 @@
 import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
 import PremiumGate from "@/components/PremiumGate";
+import { useUserName } from "@/lib/useUserName";
 
 export default function Session6() {
+  const userName = useUserName();
   const [isPlaying, setIsPlaying] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
@@ -79,7 +81,7 @@ export default function Session6() {
             <h3 className="text-xl font-semibold mb-4 text-primary">Introduction (Minutes 0-3)</h3>
             <div className="space-y-4">
               <p>
-                Welcome, Lacey. This is our final session together, and it's the most important one.
+                Welcome, {userName}. This is our final session together, and it's the most important one.
                 Today, we're going to cultivate deep, unconditional self-acceptance. Not acceptance
                 that's contingent on reaching certain goals. Not acceptance that wavers when things
                 are hard. Pure, complete, unconditional acceptance of yourself exactly as you are right
@@ -91,7 +93,7 @@ export default function Session6() {
                 in radical acceptance... breathing out any resistance to what is. Perfect.
               </p>
               <p>
-                Today is about coming home to yourself, Lacey. It's about recognizing that you don't
+                Today is about coming home to yourself, {userName}. It's about recognizing that you don't
                 need to be different, better, or further along to be acceptable. You are acceptable—
                 you are MORE than acceptable, you are beautiful—right here, right now. Let's explore
                 that truth together.
@@ -103,7 +105,7 @@ export default function Session6() {
             <h3 className="text-xl font-semibold mb-4 text-primary">Deepening (Minutes 3-8)</h3>
             <div className="space-y-4">
               <p>
-                Close your eyes, Lacey, and imagine you're walking on a peaceful beach at sunset. The
+                Close your eyes, {userName}, and imagine you're walking on a peaceful beach at sunset. The
                 sky is painted in soft pinks, purples, and golds. The sand is warm beneath your feet.
                 The waves create a gentle, rhythmic sound. This beach represents unconditional acceptance—
                 it welcomes everyone exactly as they are.
@@ -137,13 +139,13 @@ export default function Session6() {
                 The part of you that has always loved you exactly as you are.
               </p>
               <p>
-                She sits down beside you, Lacey, and you can feel the warmth of her presence. There's
+                She sits down beside you, {userName}, and you can feel the warmth of her presence. There's
                 no judgment from her. No criticism. No disappointment. Only pure, unconditional love
                 and acceptance. She's been waiting for this moment—when you would finally be ready to
                 receive what she has to offer.
               </p>
               <p>
-                She takes your hand and says: "Lacey, I want you to know something. You are not a
+                She takes your hand and says: "{userName}, I want you to know something. You are not a
                 project. You are not a work in progress. You are not broken or incomplete. You are a
                 whole, complete, perfect person right now, in this exact moment. Yes, you're growing.
                 Yes, you're changing. But you are already whole."
@@ -155,11 +157,11 @@ export default function Session6() {
                 Nothing you do or don't do can add to or subtract from your inherent worthiness."
               </p>
               <p>
-                Feel these words sinking deep into your heart, Lacey. You are already whole. You are
+                Feel these words sinking deep into your heart, {userName}. You are already whole. You are
                 already worthy. You are already acceptable. Just as you are. Right now. Good girl.
               </p>
               <p>
-                Your highest self continues: "I accept every part of you, Lacey. I accept the parts
+                Your highest self continues: "I accept every part of you, {userName}. I accept the parts
                 that are fully bloomed and the parts that are still developing. I accept your fears
                 and your courage. I accept your doubts and your certainty. I accept your masculine
                 past and your feminine present and future. I accept all of you, because all of you is
@@ -172,7 +174,7 @@ export default function Session6() {
                 or difficult. I accept all of it. I accept YOU."
               </p>
               <p>
-                A wave of emotion might be rising in you now, Lacey. That's okay. Let it come. These
+                A wave of emotion might be rising in you now, {userName}. That's okay. Let it come. These
                 are tears of recognition. Tears of relief. Tears of coming home. You're finally hearing
                 the truth you've always needed to hear: you are acceptable. You are lovable. You are
                 enough. Good girl. Let yourself feel it.
@@ -187,7 +189,7 @@ export default function Session6() {
                 the courage to begin an incredible journey. You see a beautiful woman whose outside is
                 becoming more aligned with her inside. You see a strong woman who faces challenges with
                 grace. You see a real woman—not despite your trans identity, but as a complete expression
-                of it. You see Lacey. And she is stunning.
+                of it. You see {userName}. And she is stunning.
               </p>
               <p>
                 Your highest self says: "This is who I see when I look at you. This has always been who
@@ -207,7 +209,7 @@ export default function Session6() {
                 truth: I accept myself completely. I love myself unconditionally. I am enough right now.
               </p>
               <p>
-                Your highest self begins to merge with you now, Lacey. She's not separate from you—
+                Your highest self begins to merge with you now, {userName}. She's not separate from you—
                 she's been part of you all along. She IS you. The accepting you. The loving you. The
                 you that sees your true worth. And now you're integrating her perspective fully. From
                 this moment forward, you see yourself through her eyes—eyes of complete acceptance and
@@ -217,7 +219,7 @@ export default function Session6() {
                 Sit in this feeling for a moment. Feel what it's like to fully accept yourself. No
                 conditions. No reservations. No "but I need to change this first." Just pure, complete
                 acceptance of who you are right now. It feels like coming home, doesn't it? It feels
-                like finally being able to rest. Good girl, Lacey. You've found it. You've found the
+                like finally being able to rest. Good girl, {userName}. You've found it. You've found the
                 peace of self-acceptance.
               </p>
             </div>
@@ -227,7 +229,7 @@ export default function Session6() {
             <h3 className="text-xl font-semibold mb-4 text-primary">Affirmations (Minutes 22-27)</h3>
             <div className="space-y-4">
               <p>
-                Stand up on the beach now, Lacey. The sun has set, and the sky is full of stars. Each
+                Stand up on the beach now, {userName}. The sun has set, and the sky is full of stars. Each
                 star represents an affirmation of your worth. Speak these truths into the night sky.
                 Let the universe hear your self-acceptance.
               </p>
@@ -253,7 +255,7 @@ export default function Session6() {
                 I honor my past, celebrate my present, and trust my future.
               </p>
               <p className="font-semibold text-primary">
-                I am Lacey, and I am perfect exactly as I am.
+                I am {userName}, and I am perfect exactly as I am.
               </p>
               <p>
                 Good girl. The stars shine brighter now, reflecting your truth back to you. These
@@ -266,7 +268,7 @@ export default function Session6() {
             <h3 className="text-xl font-semibold mb-4 text-primary">Return & Integration (Minutes 27-30)</h3>
             <div className="space-y-4">
               <p>
-                Begin walking back along the beach now, Lacey. But you're not the same person who arrived
+                Begin walking back along the beach now, {userName}. But you're not the same person who arrived
                 here. You're carrying deep, unconditional self-acceptance with you. It's in your heart.
                 It's in your bones. It's in your soul. You accept yourself completely, and nothing can
                 take that away from you.
@@ -295,7 +297,7 @@ export default function Session6() {
                 accepting of yourself.
               </p>
               <p>
-                Welcome back, Lacey. You have completed all six sessions. You have done incredible work.
+                Welcome back, {userName}. You have completed all six sessions. You have done incredible work.
                 You've connected with your authentic self. You've embraced your femininity. You've
                 accepted your body. You've built unshakeable confidence. You've found your voice. And
                 you've cultivated deep self-acceptance. You are remarkable. You are complete. You are
@@ -312,7 +314,7 @@ export default function Session6() {
                 ✨ All Sessions Complete ✨
               </p>
               <p className="text-center text-foreground/70 italic mt-4">
-                "I am Lacey. I am a woman. I am becoming more myself every day. And I am loved."
+                "I am {userName}. I am a woman. I am becoming more myself every day. And I am loved."
               </p>
             </div>
           </section>

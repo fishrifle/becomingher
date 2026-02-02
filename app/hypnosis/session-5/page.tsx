@@ -3,8 +3,10 @@
 import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
 import PremiumGate from "@/components/PremiumGate";
+import { useUserName } from "@/lib/useUserName";
 
 export default function Session5() {
+  const userName = useUserName();
   const [isPlaying, setIsPlaying] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
@@ -79,7 +81,7 @@ export default function Session5() {
             <h3 className="text-xl font-semibold mb-4 text-primary">Introduction (Minutes 0-3)</h3>
             <div className="space-y-4">
               <p>
-                Hello, Lacey. Today's session is about finding your authentic voice and presence. Not
+                Hello, {userName}. Today's session is about finding your authentic voice and presence. Not
                 just the sound of your voice, but the way you express yourself, the way you take up
                 space, the way you communicate your truth. Get comfortable now... and let's begin with
                 a deep, centering breath.
@@ -90,7 +92,7 @@ export default function Session5() {
                 being seen and heard. Perfect.
               </p>
               <p>
-                Your voice matters, Lacey. Your presence matters. You deserve to be heard. You deserve
+                Your voice matters, {userName}. Your presence matters. You deserve to be heard. You deserve
                 to take up space. You deserve to express yourself authentically. Today, we're going to
                 help you step fully into that power.
               </p>
@@ -101,7 +103,7 @@ export default function Session5() {
             <h3 className="text-xl font-semibold mb-4 text-primary">Deepening (Minutes 3-8)</h3>
             <div className="space-y-4">
               <p>
-                Close your eyes, Lacey, and imagine you're standing in the center of a beautiful
+                Close your eyes, {userName}, and imagine you're standing in the center of a beautiful
                 concert hall. It's elegant and intimate, with perfect acoustics. The seats are empty
                 right now—this space is just for you. This is YOUR stage. YOUR platform. YOUR space
                 to be heard.
@@ -118,7 +120,7 @@ export default function Session5() {
               </p>
               <p>
                 Feel the warmth of the spotlight. It's not harsh—it's gentle and loving. It wants to
-                illuminate you. It wants the world to see you. You belong here, Lacey. You belong in
+                illuminate you. It wants the world to see you. You belong here, {userName}. You belong in
                 the light. You belong in the center of your own life. Take a moment to feel that truth.
               </p>
             </div>
@@ -139,7 +141,7 @@ export default function Session5() {
                 you're ready for it. Good girl.
               </p>
               <p>
-                Now, Lacey, I want you to become aware of your throat. Your throat chakra—the energy
+                Now, {userName}, I want you to become aware of your throat. Your throat chakra—the energy
                 center of communication and authentic expression. Imagine it glowing with a beautiful
                 blue light. This is your voice center, and it's opening now... expanding... becoming
                 clear and powerful.
@@ -174,7 +176,7 @@ export default function Session5() {
                 more accessible, more effortless. Good girl.
               </p>
               <p>
-                But voice is more than just sound, Lacey. It's also presence. It's the way you carry
+                But voice is more than just sound, {userName}. It's also presence. It's the way you carry
                 yourself. It's the energy you bring into a room. So let's work on that now. Feel the
                 blue light expanding outward from your throat, creating a field of energy around you.
                 This is your presence. This is your aura. It says: "I am here. I matter. I belong."
@@ -182,7 +184,7 @@ export default function Session5() {
               <p>
                 Stand tall in your spotlight. Feel your feet firmly planted on the stage. Feel your
                 spine straight and strong. Feel your head held high. This is confident presence. This
-                is a woman who knows her worth. This is you, Lacey. Good girl.
+                is a woman who knows her worth. This is you, {userName}. Good girl.
               </p>
               <p>
                 Now the concert hall begins to fill with people. They're here to listen to you. They're
@@ -197,15 +199,15 @@ export default function Session5() {
                 what you have to offer. And you're ready to give it.
               </p>
               <p>
-                Speak into the microphone now, Lacey. Say whatever comes to your heart. Maybe it's
-                "I am Lacey, and this is my truth." Maybe it's "I am a woman, and my voice matters."
+                Speak into the microphone now, {userName}. Say whatever comes to your heart. Maybe it's
+                "I am {userName}, and this is my truth." Maybe it's "I am a woman, and my voice matters."
                 Maybe it's "I am here, I am real, and I deserve to be heard." Whatever it is, say it
                 with conviction. Say it with your whole heart. Good girl.
               </p>
               <p>
                 The audience responds with warmth and acceptance. They're nodding. They're smiling.
                 Some are even clapping. They received your message. They heard you. And they valued
-                what you had to say. Feel how good this feels, Lacey. This is what it's like to use
+                what you had to say. Feel how good this feels, {userName}. This is what it's like to use
                 your voice authentically. This is what it's like to step into your presence. And it
                 feels amazing.
               </p>
@@ -223,7 +225,7 @@ export default function Session5() {
             <div className="space-y-4">
               <p>
                 The audience fades now, and you're alone on stage again. Speak these affirmations into
-                the microphone, Lacey. Let them echo through the concert hall. Let them resonate in
+                the microphone, {userName}. Let them echo through the concert hall. Let them resonate in
                 your soul.
               </p>
               <p className="font-semibold text-primary">
@@ -248,7 +250,7 @@ export default function Session5() {
                 I speak my truth with courage and compassion.
               </p>
               <p className="font-semibold text-primary">
-                I am Lacey, and my voice matters.
+                I am {userName}, and my voice matters.
               </p>
               <p>
                 Good girl. These affirmations are now recorded in this concert hall, and in your heart.
@@ -262,7 +264,7 @@ export default function Session5() {
             <h3 className="text-xl font-semibold mb-4 text-primary">Return (Minutes 27-30)</h3>
             <div className="space-y-4">
               <p>
-                Step away from the microphone now, Lacey. The spotlight follows you as you walk toward
+                Step away from the microphone now, {userName}. The spotlight follows you as you walk toward
                 the front of the stage. You're leaving this concert hall, but you're taking everything
                 you've learned with you. Your voice. Your presence. Your confidence. They're yours now.
               </p>
@@ -285,7 +287,7 @@ export default function Session5() {
                 feeling confident in your voice and powerful in your presence.
               </p>
               <p>
-                Welcome back, Lacey. Your voice matters. Your words matter. Your presence matters. Go
+                Welcome back, {userName}. Your voice matters. Your words matter. Your presence matters. Go
                 forth and use them. The world is ready to hear what you have to say. Good girl.
               </p>
               <p className="text-center font-semibold text-lg text-primary mt-6">

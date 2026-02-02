@@ -3,6 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
+import { useUserName } from "@/lib/useUserName";
 
 interface HypnosisSession {
   id: number;
@@ -14,6 +15,7 @@ interface HypnosisSession {
 }
 
 export default function HypnosisPage() {
+  const userName = useUserName();
   const [selectedSession, setSelectedSession] = useState<number | null>(null);
 
   const sessions: HypnosisSession[] = [
@@ -118,7 +120,7 @@ export default function HypnosisPage() {
                 Guided Hypnosis for Transformation
               </h2>
               <p className="text-lg text-white/95 max-w-2xl mx-auto mb-6 drop-shadow-lg">
-                These sessions are designed specifically for you, Lacey. Each one
+                These sessions are designed specifically for you, {userName}. Each one
                 is crafted to support your journey of becoming your authentic self.
                 Find a quiet, comfortable space and allow yourself to relax deeply.
               </p>

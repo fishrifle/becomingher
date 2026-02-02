@@ -11,7 +11,7 @@ export default function Routine2() {
     {
       name: "Butterfly Pose (Baddha Konasana)",
       duration: "2 minutes",
-      image: "https://media.istockphoto.com/id/1311849385/photo/woman-practicing-yoga-bound-angle-pose.jpg?s=2048x2048&w=is&k=20&c=8KvqJ5yQ_ZQm5JzJZJ5J5J5J5J5J5J5J5J5J5J5J5J=",
+      image: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=800",
       instructions: [
         "Sit on the floor with legs extended",
         "Bend your knees and bring the soles of your feet together",

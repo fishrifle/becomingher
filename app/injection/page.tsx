@@ -3,8 +3,10 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
+import { useUserName } from "@/lib/useUserName";
 
 export default function InjectionPage() {
+  const userName = useUserName();
   const [currentStep, setCurrentStep] = useState(0);
   const [completed, setCompleted] = useState(false);
 
@@ -85,7 +87,7 @@ export default function InjectionPage() {
         "Imagine: Your future self, weeks and months from now, more confident, more yourself",
         "Remember: Each injection is a gift you're giving yourself",
         "Take 3 more deep breaths",
-        "Open your eyes when ready. You've got this, Lacey."
+        `Open your eyes when ready. You've got this, ${userName}.`
       ],
       tip: "Connecting to your 'why' makes the temporary discomfort worth it."
     },
@@ -193,7 +195,7 @@ export default function InjectionPage() {
                 <div>
                   <div className="text-5xl mb-4">💉💝✨</div>
                   <h2 className="text-3xl sm:text-4xl font-bold mb-4 text-white drop-shadow-2xl">
-                    You Can Do This, Lacey
+                    You Can Do This, {userName}
                   </h2>
                   <p className="text-lg text-white/95 max-w-2xl mx-auto mb-4 drop-shadow-lg">
                     Needle phobia is completely normal and so common. This step-by-step routine is
@@ -284,7 +286,7 @@ export default function InjectionPage() {
           /* Completion Screen */
           <div className="text-center py-12">
             <div className="text-6xl mb-6">🎉✨💝</div>
-            <h2 className="text-4xl font-bold mb-4">You Did It, Lacey!</h2>
+            <h2 className="text-4xl font-bold mb-4">You Did It, {userName}!</h2>
             <p className="text-xl text-foreground/70 mb-8 max-w-2xl mx-auto">
               You just completed your hormone injection routine! That took real courage.
               You should be so proud of yourself. Each week it will get easier—I promise.
