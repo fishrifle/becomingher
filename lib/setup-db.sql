@@ -23,3 +23,20 @@ alter table subscriptions enable row level security;
 create policy "Service role only" on subscriptions
   for all
   using (auth.role() = 'service_role');
+
+-- User profiles for onboarding data
+create table if not exists user_profiles (
+  user_id text primary key,
+  preferred_name text,
+  transition_stage text,
+  goals text[] default '{}',
+  onboarding_completed boolean not null default false,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+alter table user_profiles enable row level security;
+
+create policy "Service role only" on user_profiles
+  for all
+  using (auth.role() = 'service_role');
