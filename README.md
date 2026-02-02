@@ -5,7 +5,7 @@ A supportive Next.js web application designed specifically for women, especially
 ## 🌸 Features
 
 ### 🌙 Hypnosis Sessions
-Six complete 30-minute guided hypnosis sessions using the name "Lacey" with "good girl" affirmations:
+Six complete 30-minute guided hypnosis sessions personalized with the user's name and "good girl" affirmations:
 1. **Awakening Your Authentic Self** - Self-discovery & acceptance
 2. **Embracing Femininity** - Feminine energy & grace
 3. **Body Harmony & Acceptance** - Body positivity & HRT support
@@ -115,7 +115,7 @@ becoming_her/
 
 ## 💝 Special Features
 
-- **Personalized Content:** All hypnosis sessions use the name "Lacey" and include "good girl" affirmations
+- **Personalized Content:** All hypnosis sessions use the user's registered name and include "good girl" affirmations
 - **Trans-Specific Guidance:** Makeup and yoga content specifically designed for trans women's needs
 - **HRT Support:** Content that acknowledges and supports the HRT journey
 - **Safe Space:** Non-judgmental, affirming language throughout
