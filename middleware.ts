@@ -10,25 +10,32 @@ const isPublicRoute = createRouteMatcher([
 
 const isOnboardingRoute = createRouteMatcher(["/onboarding"]);
 const isApiProfileRoute = createRouteMatcher(["/api/profile(.*)"]);
+const isHomePage = createRouteMatcher(["/"]);
 
 export default clerkMiddleware(async (auth, request) => {
-  if (isPublicRoute(request)) return;
+  const { userId, sessionClaims } = await auth();
 
-  const { userId, sessionClaims } = await auth.protect();
+  // Not signed in — allow public routes, protect everything else
+  if (!userId) {
+    if (!isPublicRoute(request)) {
+      return (await auth.protect()) as never;
+    }
+    return;
+  }
 
-  // Always allow profile API and onboarding page
+  // Signed in — always allow profile API
   if (isApiProfileRoute(request)) return;
 
-  // Check if user has completed onboarding
+  // Check onboarding status
   const metadata = sessionClaims?.metadata as { onboarded?: boolean } | undefined;
   const onboarded = metadata?.onboarded;
 
-  // Redirect to onboarding if not completed
+  // Not onboarded — redirect to /onboarding from any page (including /)
   if (!onboarded && !isOnboardingRoute(request)) {
     return Response.redirect(new URL("/onboarding", request.url));
   }
 
-  // Redirect away from onboarding if already completed
+  // Already onboarded — redirect away from /onboarding
   if (onboarded && isOnboardingRoute(request)) {
     return Response.redirect(new URL("/", request.url));
   }
@@ -36,9 +43,7 @@ export default clerkMiddleware(async (auth, request) => {
 
 export const config = {
   matcher: [
-    // Skip Next.js internals and all static files, unless found in search params
     "/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)",
-    // Always run for API routes
     "/(api|trpc)(.*)",
   ],
 };
