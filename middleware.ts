@@ -10,7 +10,6 @@ const isPublicRoute = createRouteMatcher([
 
 const isOnboardingRoute = createRouteMatcher(["/onboarding"]);
 const isApiProfileRoute = createRouteMatcher(["/api/profile(.*)"]);
-const isHomePage = createRouteMatcher(["/"]);
 
 export default clerkMiddleware(async (auth, request) => {
   const { userId, sessionClaims } = await auth();
@@ -23,14 +22,16 @@ export default clerkMiddleware(async (auth, request) => {
     return;
   }
 
-  // Signed in — always allow profile API
+  // Always allow profile API
   if (isApiProfileRoute(request)) return;
 
-  // Check onboarding status
+  // Check onboarding status from session claims OR cookie fallback
   const metadata = sessionClaims?.metadata as { onboarded?: boolean } | undefined;
-  const onboarded = metadata?.onboarded;
+  const onboardedFromClaims = metadata?.onboarded;
+  const onboardedFromCookie = request.cookies.get("onboarded")?.value === "true";
+  const onboarded = onboardedFromClaims || onboardedFromCookie;
 
-  // Not onboarded — redirect to /onboarding from any page (including /)
+  // Not onboarded — redirect to /onboarding
   if (!onboarded && !isOnboardingRoute(request)) {
     return Response.redirect(new URL("/onboarding", request.url));
   }

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useUser, useSession } from "@clerk/nextjs";
+import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 
 const TRANSITION_STAGES = [
@@ -25,7 +25,6 @@ const GOALS = [
 
 export default function OnboardingPage() {
   const { user, isLoaded } = useUser();
-  const { session } = useSession();
   const router = useRouter();
   const [step, setStep] = useState(0);
   const [animating, setAnimating] = useState(false);
@@ -72,10 +71,9 @@ export default function OnboardingPage() {
           onboarding_completed: true,
         }),
       });
-      // Force Clerk to refresh the session token so middleware sees updated metadata
-      await session?.reload();
-      // Small delay to ensure the new token propagates
-      await new Promise((r) => setTimeout(r, 500));
+      // Set a cookie so middleware knows onboarding is done
+      // (Clerk JWT may take up to 60s to refresh with new metadata)
+      document.cookie = "onboarded=true; path=/; max-age=31536000; SameSite=Lax";
       window.location.href = "/";
     } catch {
       setSaving(false);
