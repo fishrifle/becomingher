@@ -49,63 +49,141 @@ export default function ChakraPage() {
     };
   }, []);
 
+  const activeNodesRef = useRef<{ oscillators: OscillatorNode[]; gains: GainNode[]; masterGain: GainNode | null }>({
+    oscillators: [],
+    gains: [],
+    masterGain: null,
+  });
+
   const playFrequency = (frequency: string, fadeIn: boolean = true) => {
-    // Stop any currently playing sound
     stopFrequency();
 
-    if (!audioContextRef.current) return;
+    const ctx = audioContextRef.current;
+    if (!ctx) return;
 
-    // Parse frequency (e.g., "396 Hz" -> 396)
     const freq = parseInt(frequency.replace(' Hz', ''));
+    const now = ctx.currentTime;
 
-    // Create oscillator and gain nodes
-    const oscillator = audioContextRef.current.createOscillator();
-    const gainNode = audioContextRef.current.createGain();
-
-    oscillator.type = 'sine'; // Sine wave for pure tone
-    oscillator.frequency.setValueAtTime(freq, audioContextRef.current.currentTime);
-
-    // Smooth fade in for better listening experience
+    // Master gain for volume control
+    const masterGain = ctx.createGain();
+    masterGain.connect(ctx.destination);
     if (fadeIn) {
-      gainNode.gain.setValueAtTime(0, audioContextRef.current.currentTime);
-      gainNode.gain.linearRampToValueAtTime(volume, audioContextRef.current.currentTime + 2);
+      masterGain.gain.setValueAtTime(0, now);
+      masterGain.gain.linearRampToValueAtTime(volume, now + 3);
     } else {
-      gainNode.gain.setValueAtTime(volume, audioContextRef.current.currentTime);
+      masterGain.gain.setValueAtTime(volume, now);
     }
 
-    // Connect nodes
-    oscillator.connect(gainNode);
-    gainNode.connect(audioContextRef.current.destination);
+    const oscillators: OscillatorNode[] = [];
+    const gains: GainNode[] = [];
 
-    // Start playing
-    oscillator.start();
+    // Layer 1: Deep sub-bass foundation (one octave below, very quiet)
+    const subOsc = ctx.createOscillator();
+    const subGain = ctx.createGain();
+    subOsc.type = 'sine';
+    subOsc.frequency.setValueAtTime(freq / 2, now);
+    subGain.gain.setValueAtTime(0.15, now);
+    subOsc.connect(subGain);
+    subGain.connect(masterGain);
+    subOsc.start(now);
+    oscillators.push(subOsc);
+    gains.push(subGain);
 
-    oscillatorRef.current = oscillator;
-    gainNodeRef.current = gainNode;
+    // Layer 2: Primary tone with gentle vibrato
+    const primaryOsc = ctx.createOscillator();
+    const primaryGain = ctx.createGain();
+    const vibrato = ctx.createOscillator();
+    const vibratoGain = ctx.createGain();
+    primaryOsc.type = 'sine';
+    primaryOsc.frequency.setValueAtTime(freq, now);
+    vibrato.type = 'sine';
+    vibrato.frequency.setValueAtTime(0.2, now); // Very slow wobble
+    vibratoGain.gain.setValueAtTime(1.5, now); // Subtle pitch variation
+    vibrato.connect(vibratoGain);
+    vibratoGain.connect(primaryOsc.frequency);
+    primaryGain.gain.setValueAtTime(0.35, now);
+    primaryOsc.connect(primaryGain);
+    primaryGain.connect(masterGain);
+    vibrato.start(now);
+    primaryOsc.start(now);
+    oscillators.push(primaryOsc, vibrato);
+    gains.push(primaryGain, vibratoGain);
+
+    // Layer 3: Slightly detuned pad (warm chorus effect)
+    const detuneOsc1 = ctx.createOscillator();
+    const detuneGain1 = ctx.createGain();
+    detuneOsc1.type = 'sine';
+    detuneOsc1.frequency.setValueAtTime(freq + 1.5, now); // Slightly sharp
+    detuneGain1.gain.setValueAtTime(0.18, now);
+    detuneOsc1.connect(detuneGain1);
+    detuneGain1.connect(masterGain);
+    detuneOsc1.start(now);
+    oscillators.push(detuneOsc1);
+    gains.push(detuneGain1);
+
+    const detuneOsc2 = ctx.createOscillator();
+    const detuneGain2 = ctx.createGain();
+    detuneOsc2.type = 'sine';
+    detuneOsc2.frequency.setValueAtTime(freq - 1.5, now); // Slightly flat
+    detuneGain2.gain.setValueAtTime(0.18, now);
+    detuneOsc2.connect(detuneGain2);
+    detuneGain2.connect(masterGain);
+    detuneOsc2.start(now);
+    oscillators.push(detuneOsc2);
+    gains.push(detuneGain2);
+
+    // Layer 4: Soft fifth harmonic (adds warmth)
+    const fifthOsc = ctx.createOscillator();
+    const fifthGain = ctx.createGain();
+    fifthOsc.type = 'sine';
+    fifthOsc.frequency.setValueAtTime(freq * 1.5, now); // Perfect fifth
+    fifthGain.gain.setValueAtTime(0.06, now);
+    fifthOsc.connect(fifthGain);
+    fifthGain.connect(masterGain);
+    fifthOsc.start(now);
+    oscillators.push(fifthOsc);
+    gains.push(fifthGain);
+
+    // Layer 5: Gentle octave shimmer
+    const octaveOsc = ctx.createOscillator();
+    const octaveGain = ctx.createGain();
+    const shimmerLfo = ctx.createOscillator();
+    const shimmerDepth = ctx.createGain();
+    octaveOsc.type = 'sine';
+    octaveOsc.frequency.setValueAtTime(freq * 2, now);
+    shimmerLfo.type = 'sine';
+    shimmerLfo.frequency.setValueAtTime(0.08, now); // Very slow breathing
+    shimmerDepth.gain.setValueAtTime(0.04, now);
+    shimmerLfo.connect(shimmerDepth);
+    shimmerDepth.connect(octaveGain.gain);
+    octaveGain.gain.setValueAtTime(0.04, now);
+    octaveOsc.connect(octaveGain);
+    octaveGain.connect(masterGain);
+    shimmerLfo.start(now);
+    octaveOsc.start(now);
+    oscillators.push(octaveOsc, shimmerLfo);
+    gains.push(octaveGain, shimmerDepth);
+
+    activeNodesRef.current = { oscillators, gains, masterGain };
+    gainNodeRef.current = masterGain;
     setIsPlaying(true);
   };
 
   const stopFrequency = (fadeOut: boolean = false) => {
-    if (fadeOut && gainNodeRef.current && audioContextRef.current) {
-      // Fade out smoothly
-      gainNodeRef.current.gain.linearRampToValueAtTime(0, audioContextRef.current.currentTime + 1.5);
+    const { oscillators, masterGain } = activeNodesRef.current;
+    const ctx = audioContextRef.current;
+
+    if (fadeOut && masterGain && ctx) {
+      masterGain.gain.linearRampToValueAtTime(0, ctx.currentTime + 2);
       setTimeout(() => {
-        if (oscillatorRef.current) {
-          oscillatorRef.current.stop();
-          oscillatorRef.current = null;
-        }
-        if (gainNodeRef.current) {
-          gainNodeRef.current = null;
-        }
-      }, 1500);
-    } else {
-      if (oscillatorRef.current) {
-        oscillatorRef.current.stop();
-        oscillatorRef.current = null;
-      }
-      if (gainNodeRef.current) {
+        oscillators.forEach((osc) => { try { osc.stop(); } catch {} });
+        activeNodesRef.current = { oscillators: [], gains: [], masterGain: null };
         gainNodeRef.current = null;
-      }
+      }, 2200);
+    } else {
+      oscillators.forEach((osc) => { try { osc.stop(); } catch {} });
+      activeNodesRef.current = { oscillators: [], gains: [], masterGain: null };
+      gainNodeRef.current = null;
     }
     setIsPlaying(false);
   };
@@ -120,8 +198,11 @@ export default function ChakraPage() {
 
   const updateVolume = (newVolume: number) => {
     setVolume(newVolume);
-    if (gainNodeRef.current && audioContextRef.current) {
-      gainNodeRef.current.gain.setValueAtTime(newVolume, audioContextRef.current.currentTime);
+    if (activeNodesRef.current.masterGain && audioContextRef.current) {
+      activeNodesRef.current.masterGain.gain.linearRampToValueAtTime(
+        newVolume,
+        audioContextRef.current.currentTime + 0.1
+      );
     }
   };
 
