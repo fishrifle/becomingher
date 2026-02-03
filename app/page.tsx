@@ -195,6 +195,7 @@ export default function Home() {
             <Link
               key={section.name}
               href={section.href}
+              prefetch={false}
               className="group relative overflow-hidden rounded-3xl border-2 border-pink-400/40 hover:border-pink-500/60 transition-all duration-300 hover:shadow-2xl hover:shadow-pink-300/20 hover:scale-105"
             >
               {/* Gradient background */}
