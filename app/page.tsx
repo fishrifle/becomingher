@@ -3,6 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
+import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -82,12 +83,17 @@ export default function Home() {
               >
                 ✨ Go Premium
               </Link>
-              <Link
-                href="/sign-in"
-                className="hidden sm:block px-4 py-2 rounded-lg border-2 border-pink-400 text-pink-500 font-semibold hover:bg-pink-50/10 transition-all"
-              >
-                Sign In
-              </Link>
+              <SignedOut>
+                <Link
+                  href="/sign-in"
+                  className="hidden sm:block px-4 py-2 rounded-lg border-2 border-pink-400 text-pink-500 font-semibold hover:bg-pink-50/10 transition-all"
+                >
+                  Sign In
+                </Link>
+              </SignedOut>
+              <SignedIn>
+                <UserButton afterSignOutUrl="/" />
+              </SignedIn>
               <button
                 onClick={() => setMenuOpen(!menuOpen)}
                 className="sm:hidden p-2 rounded-lg hover:bg-primary/10 transition-colors"
@@ -135,6 +141,22 @@ export default function Home() {
                 {section.name}
               </Link>
             ))}
+            <SignedIn>
+              <div className="pt-2 border-t border-primary/20 mt-2 px-4 py-2 flex items-center gap-3">
+                <UserButton afterSignOutUrl="/" />
+                <span className="text-sm text-foreground/60">Account</span>
+              </div>
+            </SignedIn>
+            <SignedOut>
+              <Link
+                href="/sign-in"
+                className="block px-4 py-2 rounded-lg hover:bg-primary/20 transition-colors"
+                onClick={() => setMenuOpen(false)}
+              >
+                <span className="mr-2">🔑</span>
+                Sign In
+              </Link>
+            </SignedOut>
           </nav>
         </div>
       )}
